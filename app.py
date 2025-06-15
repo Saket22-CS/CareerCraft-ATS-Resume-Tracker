@@ -13,7 +13,7 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key = st.secrets["OPENROUTER_API_KEY"]  # Replace with your own key
+    api_key="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",  # Replace with your own key
 )
 
 def get_openrouter_response(prompt):
