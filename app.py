@@ -13,20 +13,23 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key = st.secrets["OPENROUTER_API_KEY"]
+    api_key="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",  # Replace with your own key
 )
 
 def get_openrouter_response(prompt):
     response = client.chat.completions.create(
-    extra_headers={
-        "HTTP-Referer": "https://saket22-cs-careercraft-ats-resume-tracker-app-1ae4mk.streamlit.app/",
-        "X-Title": "CareerCraft ATS Resume Tracker"
-    },
-    model="deepseek/deepseek-r1-0528:free",
-    messages=[
-        {"role": "user", "content": prompt}
-    ]
-)
+        extra_headers={
+            "HTTP-Referer": "http://localhost",  # Or your deployed URL
+            "X-Title": "Resume ATS Tracker"
+        },
+        model="deepseek/deepseek-r1-0528-qwen3-8b:free",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
     return response.choices[0].message.content
 
 
@@ -113,16 +116,14 @@ with col1:
     submit = st.button("Submit")
 
     if submit:
-     if uploaded_file is not None:
-        with st.spinner("Analyzing your resume..."):
-            text = input_pdf_text(uploaded_file)
-            formatted_prompt = input_prompt.format(text=text, jd=jd)
-            response = get_openrouter_response(formatted_prompt)
-        st.success("Analysis complete!")
-        st.subheader(response)
-     else:
-        st.warning("Please upload a PDF resume.")
-
+        if uploaded_file is not None:
+            resume_text = input_pdf_text(uploaded_file)
+            input_prompt = f"Resume:\n{resume_text}\n\nJob Description:\n{jd}\n\nSuggest improvements and analyze match."
+            response = get_openrouter_response(input_prompt)
+            st.subheader("🔎 AI Analysis Result:")
+            st.write(response)
+        else:
+            st.warning("⚠️ Please upload your resume.")
 
 with col2:
     st.image('https://cdn.dribbble.com/userupload/10705722/file/original-9d3f87765ad640af12d79ed8a6278cbf.gif', use_container_width=True)
