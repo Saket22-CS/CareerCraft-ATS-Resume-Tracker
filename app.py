@@ -13,23 +13,20 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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",  # Replace with your own key
+    api_key = st.secrets["OPENROUTER_API_KEY"]
 )
 
 def get_openrouter_response(prompt):
     response = client.chat.completions.create(
-        extra_headers={
-            "HTTP-Referer": "http://localhost",  # Or your deployed URL
-            "X-Title": "Resume ATS Tracker"
-        },
-        model="deepseek/deepseek-r1-0528-qwen3-8b:free",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    extra_headers={
+        "HTTP-Referer": "https://saket22-cs-careercraft-ats-resume-tracker-app-1ae4mk.streamlit.app/",
+        "X-Title": "CareerCraft ATS Resume Tracker"
+    },
+    model="deepseek/deepseek-r1-0528:free",
+    messages=[
+        {"role": "user", "content": prompt}
+    ]
+)
     return response.choices[0].message.content
 
 
