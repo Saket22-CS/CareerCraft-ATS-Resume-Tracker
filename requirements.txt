@@ -1,0 +1,17 @@
+# Streamlit framework for interactive web apps
+streamlit
+
+# Extra utilities for enhanced Streamlit components
+streamlit_extras
+
+# Google Generative AI SDK for Gemini model interaction
+google-generativeai
+
+# Environment variable support from .env file
+python-dotenv
+
+# PDF text extraction and manipulation
+PyPDF2
+
+# Image processing support
+Pillow
