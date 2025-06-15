@@ -15,3 +15,5 @@ PyPDF2
 
 # Image processing support
 Pillow
+
+openai
