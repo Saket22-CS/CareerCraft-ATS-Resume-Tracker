@@ -7,15 +7,11 @@ import PyPDF2                         # PDF text extraction
 from PIL import Image                 # Image handling
 
 
-
-
 from openai import OpenAI
 
-# Load environment variables from .env file
-load_dotenv()
 
 # Read the API key from environment variable
-api_key = os.getenv("OPENROUTER_API_KEY")
+api_key = st.secrets["OPENROUTER_API_KEY"]
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
