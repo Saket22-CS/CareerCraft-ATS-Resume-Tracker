@@ -12,7 +12,6 @@ from openai import OpenAI
 
 
 
-# Load API key
 load_dotenv()
 api_key = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY"))
 
