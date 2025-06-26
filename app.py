@@ -10,29 +10,46 @@ from PIL import Image                 # Image handling
 from openai import OpenAI
 
 
-# Read the API key from environment variable
-api_key = st.secrets["OPENROUTER_API_KEY"]
 
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=api_key,  # Replace with your own key
-)
 
-def get_openrouter_response(prompt):
-    response = client.chat.completions.create(
-        extra_headers={
-            "HTTP-Referer": "http://localhost",  # Or your deployed URL
-            "X-Title": "Resume ATS Tracker"
-        },
-        model="deepseek/deepseek-r1-0528-qwen3-8b:free",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
-    return response.choices[0].message.content
+# Load API key
+load_dotenv()
+api_key = st.secrets.get("GEMINI_API_KEY", os.getenv("GEMINI_API_KEY"))
+
+# Initialize Gemini
+genai.configure(api_key=api_key)
+model = genai.GenerativeModel('gemini-2.0-flash')
+
+# Response function
+def get_gemini_response(prompt):
+    response = model.generate_content(prompt)
+    return response.text
+
+
+
+# # Read the API key from environment variable
+# api_key = st.secrets["OPENROUTER_API_KEY"]
+
+# client = OpenAI(
+#     base_url="https://openrouter.ai/api/v1",
+#     api_key=api_key,  # Replace with your own key
+# )
+
+# def get_openrouter_response(prompt):
+#     response = client.chat.completions.create(
+#         extra_headers={
+#             "HTTP-Referer": "http://localhost",  # Or your deployed URL
+#             "X-Title": "Resume ATS Tracker"
+#         },
+#         model="deepseek/deepseek-r1-0528-qwen3-8b:free",
+#         messages=[
+#             {
+#                 "role": "user",
+#                 "content": prompt
+#             }
+#         ]
+#     )
+#     return response.choices[0].message.content
 
 
 
@@ -121,7 +138,7 @@ with col1:
         if uploaded_file is not None:
             resume_text = input_pdf_text(uploaded_file)
             input_prompt = f"Resume:\n{resume_text}\n\nJob Description:\n{jd}\n\nSuggest improvements and analyze match."
-            response = get_openrouter_response(input_prompt)
+            response = get_gemini_response(input_prompt)
             st.subheader("🔎 AI Analysis Result:")
             st.write(response)
         else:
